@@ -5,6 +5,7 @@ from sympy import randprime, isprime
  #  RSA 1.4
 
  #	Montoya Montes Pedro-----31219536-2
+ #  Calo Dizy Fabio G.
 
 #Calcula el maximo comun divisor.
 def mcd(a, b):
@@ -45,15 +46,11 @@ class RSA:
 		while RSA.p == RSA.q:
 			RSA.p = randprime(RSA.num_range/2,RSA.num_range) #Generamos el primer primo aleatorio.
 			RSA.q = randprime(RSA.num_range/2,RSA.num_range) #Generamos el segundo primo aleatorio.
-		#RSA.p = 61
-		#RSA.q= 53
 		RSA.N = RSA.p*RSA.q 			   #Calculamos n = p*q.
 		RSA.phi = (RSA.p-1)*(RSA.q-1) 	   #Calculamos phi(n)= (p-1)(q-1).
 
 		RSA.e = randprime(1,RSA.num_range/2)
 		
-		#RSA.e = 17
-
 		#Creamos a "e" para que sea menor que phi y que el mcd(phi,e) = 1
 		while mcd(RSA.phi, RSA.e) != 1 and RSA.e < RSA.phi:
 			RSA.e += 1
@@ -91,14 +88,13 @@ def encripta(plainText, llavePublica):
 def desencripta(cipherText, llavePrivada):
 	d = llavePrivada[1]
 	N = llavePrivada[0]
-	print("Momentito, descifrando...") 					# Mensaje para que no se desespere el ususario.
-
 
 	cipher = [chr(char ) for char in cipherText]
 	print("Cadena Encriptada ")
 	textoCifrado = ''.join(cipher)
 	print(textoCifrado)
 
+	print("Momentito, descifrando...") 					# Mensaje para que no se desespere el ususario.
 
 	plain = [chr((char ** d) % N) for char in cipherText]
 	print("Cadena desencriptada ")
@@ -109,7 +105,7 @@ def desencripta(cipherText, llavePrivada):
 if __name__ == '__main__':
 	rsa = RSA()											# Creamos un nuevo objeto del tipo RSA
 
-	textoPlano = input("Ingresa el texto: ")#"hola" 	                            # Texto dado por el usuario.
+	textoPlano = input("Ingresa el texto: ")	        # Texto dado por el usuario.
 
 	rsa.displayInfo()
 
