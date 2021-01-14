@@ -49,6 +49,7 @@ def orden(a, m, phi_m):
 		pot=pot+1 
 
 
+# Función para calcular raíces primitivas de un entero positivo m
 def raices_primitivas(m):
 	phi_m =phi(m)
 	total_raices=phi(phi_m)
@@ -73,28 +74,19 @@ class DH:
 	g = 0
 
 	def __init__(self):
-		DH.num_range = 2**10 			   #Creamos el tamaño de nuestro primo, debe ser 1024
-		DH.p = randprime(DH.num_range/2,DH.num_range) #Generamos el primer primo aleatorio.
-		#DH.p = 23
-		DH.primitive_root = raices_primitivas(DH.p) 
-		DH.primitive_roots = self.primitive_root[0] 
-		DH.total_roots = self.primitive_root[1]
-		DH.random_primitive_root = random.randint(0,DH.total_roots-1)
-		DH.g= DH.primitive_roots[DH.random_primitive_root]
-		#DH.g= self.primitive_roots[0]
-		#DH.b = randint(1,DH.p-1)
+		DH.num_range = 2**10 			   						#Creamos el tamaño de nuestro primo, debe ser 1024
+		DH.p = randprime(DH.num_range/2,DH.num_range) 			#Generamos el primer primo aleatorio.
+		DH.primitive_root = raices_primitivas(DH.p) 			#Calculamos las raíces primitivas y guardamos.
+		DH.primitive_roots = self.primitive_root[0] 			#El arreglo de las raíces primitivas.
+		DH.total_roots = self.primitive_root[1]					#El total de raíces primitivas.
+		DH.random_primitive_root = random.randint(0,DH.total_roots-1)#Valor aleatorio entre 0-phi(phi(p))
+		DH.g= DH.primitive_roots[DH.random_primitive_root]		#Tomamos una raíz primitiva aleatoria
 
-
-	def getG(self):
-		return DH.g
-
-	def getP(self):
-		return DH.p
-
-
+	#Función que calcula lo que se enviará
 	def envia(self, num):
 		return ((DH.g**num)%DH.p)	
 
+	#Función que calcula lo que se rescibió.
 	def recibe(self,mensaje,num):
 		return((mensaje**num)%DH.p)
 
@@ -102,9 +94,9 @@ class DH:
 	def displayInfo(self):
 		print("P   = ", self.p)
 		print("g   = ", self.g)
-		#print("Raíces raices_primitivas =",DH.primitive_roots)
+		#print("Raíces raices_primitivas =",DH.primitive_roots) #Comentado para evitar mucha basura visual
 
-
+#Clase para crear usuarios que tendrán un valor aleatorio
 class user:
 	n=0
 	def __init__(self):
@@ -114,9 +106,11 @@ class user:
 
 
 if __name__ == '__main__':
-	dh = DH()
-	dh.displayInfo()
 
+	dh = DH()			#Iniciamos Diffie-Hellman
+	dh.displayInfo()	#Mostramos información para usuarios
+
+	#Usuarios
 	alice = user() 
 	randA = alice.n
 
@@ -124,13 +118,13 @@ if __name__ == '__main__':
 	randB= bob.n
 
 
-
+	#Mensajes que envia cada uno
 	mensajeAlice =	dh.envia(randA)
 	print("Alice envia a Bob:", mensajeAlice)
 
 	mensajeBob = dh.envia(randB)
 	print("Bob envia a Alice:",mensajeBob)	
 
-
+	#Mensajes que reciben
 	print("Alice calcula:     s=", dh.recibe(mensajeBob,randA))
 	print("Bob calcula:       s=", dh.recibe(mensajeAlice,randB))	

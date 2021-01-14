@@ -2,7 +2,7 @@ from sympy import randprime, isprime
 
  #  <p>Clase principal para cifrar y descifrar con algoritmo RSA.</p>
 
- #  RSA 1.4
+ #  RSA 1.5
 
  #	Montoya Montes Pedro-----31219536-2
  #	Calo Dizy Fabio G.
@@ -48,18 +48,18 @@ class RSA:
 			RSA.q = randprime(RSA.num_range/2,RSA.num_range) #Generamos el segundo primo aleatorio.
 		RSA.N = RSA.p*RSA.q 			   #Calculamos n = p*q.
 		RSA.phi = (RSA.p-1)*(RSA.q-1) 	   #Calculamos phi(n)= (p-1)(q-1).
-
-		RSA.e = randprime(1,RSA.num_range/2)
+		RSA.e = randprime(1,RSA.num_range/2) #Caclulamos e semialeatorio
 		
-		#Creamos a "e" para que sea menor que phi y que el mcd(phi,e) = 1
+		#Modificamos "e" para que sea menor que phi y que el mcd(phi,e) = 1
 		while mcd(RSA.phi, RSA.e) != 1 and RSA.e < RSA.phi:
 			RSA.e += 1
 			pass
 
 		RSA.d =  modinv(RSA.e, RSA.phi)    #Calculamos d el módulo inverso de e con phi.
 
+	#Se generan las llaves con la información que tenemos
 	def genera_llaves(self):
-		return ((RSA.e, RSA.N), (RSA.N, RSA.d))
+		return ((RSA.e, RSA.N), (RSA.d,RSA.N))
 
 	#Clase auxiliar para ver toda la información que se está manejando, útil para programadores.
 	def displayInfo(self):
@@ -72,48 +72,47 @@ class RSA:
 
 #Clase que dado un plainText, lo encripta con algoritmo de RSA
 def encripta(plainText, llavePublica):
-	e = llavePublica[0]
+	e = llavePublica[0] 
 	N = llavePublica[1]
-	#print("1.Cadena convertida:")
-	#textoOriginal = [(ord(char)) for char in plainText]
 
-	#print(textoOriginal)
-	#print("2.Cadena encriptada: ")
 	cipher = [(ord(char) ** e) % N for char in plainText]	
-
-	#print(cipher)
 	return cipher
 
 #Clase que dado un cipherText, lo desencripta con algoritmo de RSA
 def desencripta(cipherText, llavePrivada):
-	d = llavePrivada[1]
-	N = llavePrivada[0]
+	d = llavePrivada[0]
+	N = llavePrivada[1]
 
 	cipher = [chr(char ) for char in cipherText]
-	print("Cadena Encriptada: ")
 	textoCifrado = ''.join(cipher)
-	print("\t\t  ",textoCifrado)
 
 	print("Awanta, descifrando...") 					# Mensaje para que no se desespere el ususario.
 
 	plain = [chr((char ** d) % N) for char in cipherText]
 	textoDescifrado = ''.join(plain)
-	print("Cadena desencriptada: ")
-	print("\t\t  ",textoDescifrado)
+
 	return textoDescifrado
 
 if __name__ == '__main__':
 	rsa = RSA()											# Creamos un nuevo objeto del tipo RSA
+	rsa.displayInfo()									#Mostramos la información
 
+	llavePublica, llavePrivada = rsa.genera_llaves(); 	#Generamos las llaves públicas y privadas.
+	print("La llave pública es: {}\nLa llave privada es: {}".format(llavePublica, llavePrivada))
+
+
+	### Entrada del texto
 	textoPlano = input("Ingresa el texto: ")	        # Texto dado por el usuario.
-
-	rsa.displayInfo()
-
 	print("Texto original: ") 
 	print("\t\t  ", textoPlano)
 
-	llavePublica, llavePrivada = rsa.genera_llaves(); 	#Generamos las llaves públicas y privadas.
-	print( "Tu llave pública es: ", llavePublica ," y tu llave privada es: ", llavePrivada)
 
-	text = encripta(textoPlano, llavePublica)			# Texto encriptado en forma su forma númerica.
-	desencripta(text, llavePrivada)						# Desencriptamos nuestro texto.
+	### Ciframos el mensaje
+	mensaje = encripta(textoPlano, llavePublica)			# Texto encriptado en forma su forma númerica.
+	print("Cadena encriptada: ")
+	print("\t\t  ","".join(str(x) for x in mensaje))
+
+	### Desciframos el mensaje
+	textoFinal = desencripta(mensaje, llavePrivada)						# Desencriptamos nuestro texto.
+	print("Cadena desencriptada: ")
+	print("\t\t  ",textoFinal)
