@@ -1,11 +1,11 @@
 from sympy import randprime, isprime
 
- #  <p>Clase principal para encrciptar y desencriptar con algoritmo RSA.</p>
+ #  <p>Clase principal para cifrar y descifrar con algoritmo RSA.</p>
 
  #  RSA 1.4
 
  #	Montoya Montes Pedro-----31219536-2
- #  Calo Dizy Fabio G.
+ #	Calo Dizy Fabio G.
 
 #Calcula el maximo comun divisor.
 def mcd(a, b):
@@ -74,11 +74,11 @@ class RSA:
 def encripta(plainText, llavePublica):
 	e = llavePublica[0]
 	N = llavePublica[1]
-	#print("Cadena convertida:")
+	#print("1.Cadena convertida:")
 	#textoOriginal = [(ord(char)) for char in plainText]
 
 	#print(textoOriginal)
-	#print("Cadena encriptada: ")
+	#print("2.Cadena encriptada: ")
 	cipher = [(ord(char) ** e) % N for char in plainText]	
 
 	#print(cipher)
@@ -90,16 +90,16 @@ def desencripta(cipherText, llavePrivada):
 	N = llavePrivada[0]
 
 	cipher = [chr(char ) for char in cipherText]
-	print("Cadena Encriptada ")
+	print("Cadena Encriptada: ")
 	textoCifrado = ''.join(cipher)
-	print(textoCifrado)
+	print("\t\t  ",textoCifrado)
 
-	print("Momentito, descifrando...") 					# Mensaje para que no se desespere el ususario.
+	print("Awanta, descifrando...") 					# Mensaje para que no se desespere el ususario.
 
 	plain = [chr((char ** d) % N) for char in cipherText]
-	print("Cadena desencriptada ")
 	textoDescifrado = ''.join(plain)
-	print(textoDescifrado)
+	print("Cadena desencriptada: ")
+	print("\t\t  ",textoDescifrado)
 	return textoDescifrado
 
 if __name__ == '__main__':
@@ -109,7 +109,8 @@ if __name__ == '__main__':
 
 	rsa.displayInfo()
 
-	print("Texto original: ", textoPlano)
+	print("Texto original: ") 
+	print("\t\t  ", textoPlano)
 
 	llavePublica, llavePrivada = rsa.genera_llaves(); 	#Generamos las llaves públicas y privadas.
 	print( "Tu llave pública es: ", llavePublica ," y tu llave privada es: ", llavePrivada)
