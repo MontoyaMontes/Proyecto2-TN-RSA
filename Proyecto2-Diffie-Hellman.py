@@ -102,29 +102,32 @@ class user:
 	def __init__(self):
 		user.n = random.randint(1,DH.p-1)
 	def displayInfo(self):
-		print("Número aleatorio	=",self.n)	
+		print(self.n)	
 
 
 if __name__ == '__main__':
-
 	dh = DH()			#Iniciamos Diffie-Hellman
 	dh.displayInfo()	#Mostramos información para usuarios
 
 	#Usuarios
 	alice = user() 
 	randA = alice.n
+	print("El valor aleatorio de Alice es :")
+	alice.displayInfo()
 
 	bob = user()
 	randB= bob.n
-
+	print("El valor aleatorio de Bob es :")
+	bob.displayInfo()
 
 	#Mensajes que envia cada uno
 	mensajeAlice =	dh.envia(randA)
-	print("Alice envia a Bob:", mensajeAlice)
+	print("Alice envia a Bob: A=",DH.g,"^",randA," (módulo ",DH.p,") =", mensajeAlice)
 
 	mensajeBob = dh.envia(randB)
-	print("Bob envia a Alice:",mensajeBob)	
+	print("Bob envia a Alice: B=",DH.g,"^",randB," (módulo ",DH.p,") =", mensajeBob)	
+
 
 	#Mensajes que reciben
-	print("Alice calcula:     s=", dh.recibe(mensajeBob,randA))
-	print("Bob calcula:       s=", dh.recibe(mensajeAlice,randB))	
+	print("Alice calcula:     s=",mensajeBob,"^",randA, " (módulo ",DH.p,") =", dh.recibe(mensajeBob,randA))
+	print("Bob calcula:       s=",mensajeAlice,"^",randB," (módulo ",DH.p,") =",  dh.recibe(mensajeAlice,randB))	

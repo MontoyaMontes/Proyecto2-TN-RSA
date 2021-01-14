@@ -97,6 +97,7 @@ if __name__ == '__main__':
 	rsa = RSA()											# Creamos un nuevo objeto del tipo RSA
 	rsa.displayInfo()									#Mostramos la información
 
+
 	llavePublica, llavePrivada = rsa.genera_llaves(); 	#Generamos las llaves públicas y privadas.
 	print("La llave pública es: {}\nLa llave privada es: {}".format(llavePublica, llavePrivada))
 
@@ -111,6 +112,7 @@ if __name__ == '__main__':
 	mensaje = encripta(textoPlano, llavePublica)			# Texto encriptado en forma su forma númerica.
 	print("Cadena encriptada: ")
 	print("\t\t  ","".join(str(x) for x in mensaje))
+
 
 	### Desciframos el mensaje
 	textoFinal = desencripta(mensaje, llavePrivada)						# Desencriptamos nuestro texto.
